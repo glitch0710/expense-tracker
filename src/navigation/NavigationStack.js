@@ -7,6 +7,7 @@ import LandingScreen from "../screens/LandingScreen";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import ResetPassword from "../screens/ResetPassword";
+import Dashboard from "../screens/Dashboard";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,11 @@ const NavigationStack = (props) => {
           options={{ headerShown: false }}
           name="ResetPassword"
           component={ResetPassword}
+        />
+        <Stack.Screen
+          options={{ headerShown: false, headerBackVisible: false }}
+          name="Dashboard"
+          component={Dashboard}
         />
       </Stack.Navigator>
     </NavigationContainer>

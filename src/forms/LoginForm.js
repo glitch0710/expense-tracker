@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
+import { StackActions } from "@react-navigation/native";
 import { useTheme, Text, Button, TextInput } from "react-native-paper";
 
 const LoginForm = ({ navigation }) => {
@@ -15,6 +16,10 @@ const LoginForm = ({ navigation }) => {
 
   const resetPasswordHandler = () => {
     navigation.navigate("ResetPassword");
+  };
+
+  const userLoginHandler = () => {
+    navigation.dispatch(StackActions.replace("Dashboard"));
   };
 
   return (
@@ -44,7 +49,7 @@ const LoginForm = ({ navigation }) => {
         buttonColor="#DBD92E"
         icon="login"
         mode="contained"
-        onPress={() => console.debug("Pressed")}
+        onPress={() => userLoginHandler()}
       >
         Login
       </Button>
