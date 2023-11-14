@@ -1,22 +1,20 @@
-import { View, StyleSheet, Image } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
 import React from "react";
-import LoginForm from "../forms/LoginForm";
 import Header from "../components/Header";
+import { useTheme } from "react-native-paper";
 
-const LoginScreen = (props) => {
+const RegisterScreen = () => {
   const theme = useTheme();
   return (
     <View
       style={{ ...styles.container, backgroundColor: theme.colors.onPrimary }}
     >
       <Header />
-      <LoginForm {...props} />
     </View>
   );
 };
 
-export default LoginScreen;
+export default RegisterScreen;
 
 const styles = StyleSheet.create({
   container: {

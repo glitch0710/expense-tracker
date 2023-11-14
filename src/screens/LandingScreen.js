@@ -1,13 +1,17 @@
 import { View, StyleSheet, Image } from "react-native";
 import React from "react";
 import { useTheme, Text, Button } from "react-native-paper";
-import Header from '../components/Header'
+import Header from "../components/Header";
 
 const LandingScreen = ({ navigation }) => {
   const theme = useTheme();
 
   const loginHandler = () => {
     navigation.navigate("LoginScreen");
+  };
+
+  const registerHandler = () => {
+    navigation.navigate("RegisterScreen");
   };
 
   return (
@@ -29,7 +33,7 @@ const LandingScreen = ({ navigation }) => {
         buttonColor="#2E98DB"
         icon="account-multiple-plus"
         mode="contained"
-        onPress={() => console.log("Pressed")}
+        onPress={() => registerHandler()}
       >
         Register
       </Button>

@@ -2,11 +2,20 @@ import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { useTheme, Text, Button, TextInput } from "react-native-paper";
 
-const LoginForm = () => {
+const LoginForm = ({ navigation }) => {
   const theme = useTheme();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [hidePass, setHidePass] = useState(true);
+
+  const registerHandler = () => {
+    navigation.navigate("RegisterScreen");
+  };
+
+  const resetPasswordHandler = () => {
+    navigation.navigate("ResetPassword");
+  };
 
   return (
     <View>
@@ -24,6 +33,10 @@ const LoginForm = () => {
         label="Password"
         mode="outlined"
         value={password}
+        secureTextEntry={hidePass ? true : false}
+        right={
+          <TextInput.Icon icon="eye" onPress={() => setHidePass(!hidePass)} />
+        }
         onChangeText={(password) => setPassword(password)}
       />
       <Button
@@ -34,6 +47,22 @@ const LoginForm = () => {
         onPress={() => console.debug("Pressed")}
       >
         Login
+      </Button>
+      <Button
+        style={{ ...styles.buttonStyle, marginTop: 15 }}
+        icon="account-multiple-plus"
+        mode="outline"
+        onPress={() => registerHandler()}
+      >
+        Don't have an account yet?
+      </Button>
+      <Button
+        style={{ ...styles.buttonStyle, marginTop: 0 }}
+        icon="lock-reset"
+        mode="outline"
+        onPress={() => resetPasswordHandler()}
+      >
+        Forgot Password
       </Button>
     </View>
   );
