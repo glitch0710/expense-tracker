@@ -1,6 +1,7 @@
 import { View, StyleSheet, Image } from "react-native";
 import React from "react";
 import { useTheme, Text, Button } from "react-native-paper";
+import Header from '../components/Header'
 
 const LandingScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -13,14 +14,7 @@ const LandingScreen = ({ navigation }) => {
     <View
       style={{ ...styles.container, backgroundColor: theme.colors.onPrimary }}
     >
-      <Image
-        source={require("../../assets/logo.png")}
-        style={{ width: 300, height: 100 }}
-      />
-      <Text variant="titleMedium" style={{ color: theme.colors.secondary }}>
-        Track your expenses easily
-      </Text>
-
+      <Header />
       <Button
         style={styles.buttonStyle}
         buttonColor="#DBD92E"

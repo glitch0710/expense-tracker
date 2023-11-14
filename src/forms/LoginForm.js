@@ -43,7 +43,7 @@ export default LoginForm;
 
 const styles = StyleSheet.create({
   textInput: {
-    marginTop: 40,
+    marginTop: 20,
     width: 300,
   },
   buttonStyle: {
