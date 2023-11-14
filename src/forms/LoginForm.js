@@ -22,6 +22,10 @@ const LoginForm = ({ navigation }) => {
     navigation.dispatch(StackActions.replace("Dashboard"));
   };
 
+  const landingHandler = () => {
+    navigation.navigate("LandingScreen");
+  };
+
   return (
     <View>
       <TextInput
@@ -52,6 +56,15 @@ const LoginForm = ({ navigation }) => {
         onPress={() => userLoginHandler()}
       >
         Login
+      </Button>
+      <Button
+        style={{ ...styles.buttonStyle, marginTop: 15 }}
+        buttonColor="#2E98DB"
+        icon="arrow-left-bold-box-outline"
+        mode="contained"
+        onPress={() => landingHandler()}
+      >
+        Back
       </Button>
       <Button
         style={{ ...styles.buttonStyle, marginTop: 15 }}
