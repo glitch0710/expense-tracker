@@ -1,10 +1,11 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import { StackActions } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { useTheme, Text, Button, TextInput } from "react-native-paper";
 
 const LoginForm = ({ navigation }) => {
   const theme = useTheme();
+  const navigations = useNavigation();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +20,11 @@ const LoginForm = ({ navigation }) => {
   };
 
   const userLoginHandler = () => {
-    navigation.dispatch(StackActions.replace("Dashboard"));
+    // navigation.dispatch(StackActions.replace("Dashboard"));
+    navigations.reset({
+      index: 0,
+      routes: [{ name: "Dashboard" }],
+    });
   };
 
   const landingHandler = () => {
