@@ -62,6 +62,7 @@ const LoginForm = ({ navigation }) => {
         values,
         errors,
         touched,
+        isSubmitting,
       }) => (
         <View>
           <TextInput
@@ -87,10 +88,17 @@ const LoginForm = ({ navigation }) => {
             error={values.password}
             secureTextEntry={hidePass ? true : false}
             right={
-              <TextInput.Icon
-                icon="eye"
-                onPress={() => setHidePass(!hidePass)}
-              />
+              hidePass ? (
+                <TextInput.Icon
+                  icon="eye"
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              ) : (
+                <TextInput.Icon
+                  icon="eye-off"
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              )
             }
             onChangeText={handleChange("password")}
           />
@@ -102,6 +110,8 @@ const LoginForm = ({ navigation }) => {
             buttonColor="#DBD92E"
             icon="login"
             mode="contained"
+            disabled={isSubmitting}
+            loading={isSubmitting}
             onPress={handleSubmit}
           >
             Login
@@ -111,6 +121,8 @@ const LoginForm = ({ navigation }) => {
             buttonColor="#2E98DB"
             icon="arrow-left-bold-box-outline"
             mode="contained"
+            disabled={isSubmitting}
+            loading={isSubmitting}
             onPress={() => landingHandler()}
           >
             Back
@@ -120,6 +132,7 @@ const LoginForm = ({ navigation }) => {
             icon="account-multiple-plus"
             mode="outline"
             onPress={() => registerHandler()}
+            disabled={isSubmitting}
           >
             Don't have an account yet?
           </Button>
@@ -128,6 +141,7 @@ const LoginForm = ({ navigation }) => {
             icon="lock-reset"
             mode="outline"
             onPress={() => resetPasswordHandler()}
+            disabled={isSubmitting}
           >
             Forgot Password
           </Button>

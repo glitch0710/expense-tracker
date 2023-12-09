@@ -49,12 +49,13 @@ const RegisterForm = ({ navigation }) => {
         values,
         errors,
         touched,
+        isSubmitting,
       }) => (
         <View>
           <TextInput
             outlineColor={theme.colors.secondary}
             style={styles.textInput}
-            label="Enter Username"
+            label="Set Username"
             mode="outlined"
             onBlur={handleBlur("username")}
             value={values.username}
@@ -72,10 +73,17 @@ const RegisterForm = ({ navigation }) => {
             onBlur={handleBlur("password")}
             secureTextEntry={hidePass ? true : false}
             right={
-              <TextInput.Icon
-                icon="eye"
-                onPress={() => setHidePass(!hidePass)}
-              />
+              hidePass ? (
+                <TextInput.Icon
+                  icon="eye"
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              ) : (
+                <TextInput.Icon
+                  icon="eye-off"
+                  onPress={() => setHidePass(!hidePass)}
+                />
+              )
             }
             onChangeText={handleChange("password")}
           />
@@ -91,10 +99,17 @@ const RegisterForm = ({ navigation }) => {
             onBlur={handleBlur("confirmPassword")}
             secureTextEntry={hideConfirmPass ? true : false}
             right={
-              <TextInput.Icon
-                icon="eye"
-                onPress={() => setHideConfirmPass(!hideConfirmPass)}
-              />
+              hideConfirmPass ? (
+                <TextInput.Icon
+                  icon="eye"
+                  onPress={() => setHideConfirmPass(!hideConfirmPass)}
+                />
+              ) : (
+                <TextInput.Icon
+                  icon="eye-off"
+                  onPress={() => setHideConfirmPass(!hideConfirmPass)}
+                />
+              )
             }
             onChangeText={handleChange("confirmPassword")}
           />
@@ -106,6 +121,8 @@ const RegisterForm = ({ navigation }) => {
             buttonColor="#2E98DB"
             icon="account-multiple-plus"
             mode="contained"
+            disabled={isSubmitting}
+            loading={isSubmitting}
             onPress={handleSubmit}
           >
             Register
@@ -114,6 +131,7 @@ const RegisterForm = ({ navigation }) => {
             style={{ ...styles.buttonStyle, marginTop: 15 }}
             icon="login"
             mode="outline"
+            disabled={isSubmitting}
             onPress={() => loginHandler()}
           >
             Already have an account
