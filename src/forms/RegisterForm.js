@@ -1,7 +1,14 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { useTheme, Text, Button, TextInput } from "react-native-paper";
+import {
+  useTheme,
+  Text,
+  Button,
+  TextInput,
+  HelperText,
+} from "react-native-paper";
+import * as Yup from "yup";
 
 const RegisterForm = ({ navigation }) => {
   const theme = useTheme();
@@ -19,12 +26,30 @@ const RegisterForm = ({ navigation }) => {
     confirmPassword: "",
   };
 
+  const registerSchema = Yup.object({
+    username: Yup.string().required("Please set your username"),
+    password: Yup.string()
+      .required("Please set your password")
+      .min(8, "Your password is too short"),
+    confirmPassword: Yup.string()
+      .required("Please confirm password")
+      .oneOf([Yup.ref("password"), null], "Passwords do not match"),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => console.debug(values)}
+      validationSchema={registerSchema}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+      }) => (
         <View>
           <TextInput
             outlineColor={theme.colors.secondary}
@@ -35,6 +60,9 @@ const RegisterForm = ({ navigation }) => {
             value={values.username}
             onChangeText={handleChange("username")}
           />
+          {errors.username && touched.username && (
+            <HelperText>{errors.username}</HelperText>
+          )}
           <TextInput
             outlineColor={theme.colors.secondary}
             style={{ ...styles.textInput, marginTop: 10 }}
@@ -51,6 +79,9 @@ const RegisterForm = ({ navigation }) => {
             }
             onChangeText={handleChange("password")}
           />
+          {errors.password && touched.password && (
+            <HelperText>{errors.password}</HelperText>
+          )}
           <TextInput
             outlineColor={theme.colors.secondary}
             style={{ ...styles.textInput, marginTop: 10 }}
@@ -67,6 +98,9 @@ const RegisterForm = ({ navigation }) => {
             }
             onChangeText={handleChange("confirmPassword")}
           />
+          {errors.confirmPassword && touched.confirmPassword && (
+            <HelperText>{errors.confirmPassword}</HelperText>
+          )}
           <Button
             style={{ ...styles.buttonStyle, marginTop: 15 }}
             buttonColor="#2E98DB"

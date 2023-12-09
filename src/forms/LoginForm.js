@@ -1,8 +1,15 @@
 import { View, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import { useTheme, Text, Button, TextInput } from "react-native-paper";
+import {
+  useTheme,
+  Text,
+  Button,
+  TextInput,
+  HelperText,
+} from "react-native-paper";
 import { Formik } from "formik";
+import * as Yup from "yup";
 
 const LoginForm = ({ navigation }) => {
   const theme = useTheme();
@@ -35,14 +42,27 @@ const LoginForm = ({ navigation }) => {
     password: "",
   };
 
+  const loginSchema = Yup.object({
+    username: Yup.string().required("Please enter your username"),
+    password: Yup.string().required("Please enter your password"),
+  });
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
         userLoginHandler(values);
       }}
+      validationSchema={loginSchema}
     >
-      {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+      }) => (
         <View>
           <TextInput
             outlineColor={theme.colors.secondary}
@@ -54,6 +74,9 @@ const LoginForm = ({ navigation }) => {
             onBlur={handleBlur("username")}
             error={values.username}
           />
+          {errors.username && touched.username && (
+            <HelperText>{errors.username}</HelperText>
+          )}
           <TextInput
             outlineColor={theme.colors.secondary}
             style={{ ...styles.textInput, marginTop: 10 }}
@@ -71,6 +94,9 @@ const LoginForm = ({ navigation }) => {
             }
             onChangeText={handleChange("password")}
           />
+          {errors.password && touched.password && (
+            <HelperText>{errors.password}</HelperText>
+          )}
           <Button
             style={styles.buttonStyle}
             buttonColor="#DBD92E"
