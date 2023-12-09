@@ -1,12 +1,24 @@
 import { View, StyleSheet, Image } from "react-native";
 import { Text, useTheme, Button } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import Header from "../components/Header";
 
 const Dashboard = (props) => {
   const theme = useTheme();
+  const navigations = useNavigation();
+
+  const handleLogout = () => {
+    navigations.reset({
+      index: 0,
+      routes: [{ name: "LoginScreen" }],
+    });
+  };
+
   return (
-    <View style={{ ...styles.container, backgroundColor: theme.colors.background }}>
+    <View
+      style={{ ...styles.container, backgroundColor: theme.colors.background }}
+    >
       <Header />
       <Button
         style={styles.buttonStyle}
@@ -14,7 +26,7 @@ const Dashboard = (props) => {
         textColor={theme.colors.onBackground}
         icon="exit-run"
         mode="contained"
-        onPress={() => props.navigation.pop()}
+        onPress={() => handleLogout()}
       >
         Logout
       </Button>
