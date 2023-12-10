@@ -1,8 +1,9 @@
 import { View, StyleSheet, Image } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text, useTheme, Divider } from "react-native-paper";
 import React from "react";
 import LoginForm from "../forms/LoginForm";
 import Header from "../components/Header";
+import SignInButtons from "../components/SignInButtons";
 
 const LoginScreen = (props) => {
   const theme = useTheme();
@@ -12,6 +13,7 @@ const LoginScreen = (props) => {
     >
       <Header />
       <LoginForm {...props} />
+      <SignInButtons />
     </View>
   );
 };
