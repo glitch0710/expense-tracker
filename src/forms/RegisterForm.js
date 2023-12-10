@@ -9,6 +9,8 @@ import {
   HelperText,
 } from "react-native-paper";
 import * as Yup from "yup";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { app, auth } from "../../firebase";
 
 const RegisterForm = ({ navigation }) => {
   const theme = useTheme();
@@ -21,13 +23,15 @@ const RegisterForm = ({ navigation }) => {
   };
 
   const initialValues = {
-    username: "",
+    email: "",
     password: "",
     confirmPassword: "",
   };
 
   const registerSchema = Yup.object({
-    username: Yup.string().required("Please set your username"),
+    email: Yup.string()
+      .email("Please enter a valid email")
+      .required("Please set your email"),
     password: Yup.string()
       .required("Please set your password")
       .min(8, "Your password is too short"),
@@ -39,7 +43,15 @@ const RegisterForm = ({ navigation }) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => console.debug(values)}
+      onSubmit={(values) => {
+        console.debug(values);
+        createUserWithEmailAndPassword(auth, values.email, values.password)
+          .then((userCredentials) => {
+            const user = userCredentials.user;
+            console.debug(user.email);
+          })
+          .catch((error) => console.debug(error.message));
+      }}
       validationSchema={registerSchema}
     >
       {({
@@ -55,14 +67,14 @@ const RegisterForm = ({ navigation }) => {
           <TextInput
             outlineColor={theme.colors.secondary}
             style={styles.textInput}
-            label="Set Username"
+            label="Set Email"
             mode="outlined"
-            onBlur={handleBlur("username")}
-            value={values.username}
-            onChangeText={handleChange("username")}
+            onBlur={handleBlur("email")}
+            value={values.email}
+            onChangeText={handleChange("email")}
           />
-          {errors.username && touched.username && (
-            <HelperText>{errors.username}</HelperText>
+          {errors.email && touched.email && (
+            <HelperText>{errors.email}</HelperText>
           )}
           <TextInput
             outlineColor={theme.colors.secondary}
