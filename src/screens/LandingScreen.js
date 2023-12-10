@@ -1,10 +1,14 @@
 import { View, StyleSheet, Image } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { useTheme, Text, Button } from "react-native-paper";
 import Header from "../components/Header";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const LandingScreen = ({ navigation }) => {
   const theme = useTheme();
+  const navigations = useNavigation();
 
   const loginHandler = () => {
     navigation.navigate("LoginScreen");
@@ -13,6 +17,17 @@ const LandingScreen = ({ navigation }) => {
   const registerHandler = () => {
     navigation.navigate("RegisterScreen");
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigations.reset({
+          index: 0,
+          routes: [{ name: "Dashboard" }],
+        });
+      }
+    });
+  }, []);
 
   return (
     <View

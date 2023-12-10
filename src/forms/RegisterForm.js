@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { Formik } from "formik";
 import {
   useTheme,
@@ -14,6 +15,7 @@ import { app, auth } from "../../firebase";
 
 const RegisterForm = ({ navigation }) => {
   const theme = useTheme();
+  const navigations = useNavigation();
 
   const [hidePass, setHidePass] = useState(true);
   const [hideConfirmPass, setHideConfirmPass] = useState(true);
@@ -43,14 +45,13 @@ const RegisterForm = ({ navigation }) => {
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {
-        console.debug(values);
-        createUserWithEmailAndPassword(auth, values.email, values.password)
+      onSubmit={async (values) => {
+        await createUserWithEmailAndPassword(auth, values.email, values.password)
           .then((userCredentials) => {
             const user = userCredentials.user;
             console.debug(user.email);
           })
-          .catch((error) => console.debug(error.message));
+          .catch((error) => alert(error.code, ": ", error.message));
       }}
       validationSchema={registerSchema}
     >
