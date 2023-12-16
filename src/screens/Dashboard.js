@@ -3,6 +3,7 @@ import { Text, useTheme, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import Header from "../components/Header";
+import ExpenseForm from "../forms/ExpenseForm";
 import { auth } from "../../firebase";
 
 const Dashboard = (props) => {
@@ -37,6 +38,7 @@ const Dashboard = (props) => {
       >
         Logout
       </Button>
+      <ExpenseForm />
     </View>
   );
 };
