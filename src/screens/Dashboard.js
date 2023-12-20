@@ -1,6 +1,7 @@
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, KeyboardAvoidingView } from "react-native";
 import { Text, useTheme, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import React from "react";
 import Header from "../components/Header";
 import ExpenseForm from "../forms/ExpenseForm";
@@ -23,23 +24,28 @@ const Dashboard = (props) => {
   };
 
   return (
-    <View
-      style={{ ...styles.container, backgroundColor: theme.colors.background }}
-    >
-      <Header />
-      <Text>User logged in: {auth.currentUser?.email}</Text>
-      <Button
-        style={styles.buttonStyle}
-        buttonColor={theme.colors.onCustom1}
-        textColor={theme.colors.onBackground}
-        icon="exit-run"
-        mode="contained"
-        onPress={() => handleLogout()}
+    <SafeAreaProvider>
+      <KeyboardAvoidingView
+        style={{
+          ...styles.container,
+          backgroundColor: theme.colors.background,
+        }}
       >
-        Logout
-      </Button>
-      <ExpenseForm />
-    </View>
+        <Header />
+        <Text>User logged in: {auth.currentUser?.email}</Text>
+        <Button
+          style={styles.buttonStyle}
+          buttonColor={theme.colors.onCustom1}
+          textColor={theme.colors.onBackground}
+          icon="exit-run"
+          mode="contained"
+          onPress={() => handleLogout()}
+        >
+          Logout
+        </Button>
+        <ExpenseForm />
+      </KeyboardAvoidingView>
+    </SafeAreaProvider>
   );
 };
 

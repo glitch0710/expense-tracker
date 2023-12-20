@@ -11,6 +11,10 @@ import { DarkScheme } from "./src/themes/DarkScheme";
 import { LightScheme } from "./src/themes/LightScheme";
 import LandingScreen from "./src/screens/LandingScreen";
 import NavigationStack from "./src/navigation/NavigationStack";
+import { en, registerTranslation } from 'react-native-paper-dates'
+
+
+registerTranslation('en', en)
 
 const theme = {
   ...DefaultTheme,
