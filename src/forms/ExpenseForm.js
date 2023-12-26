@@ -1,44 +1,106 @@
-import { StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
-import { Text, TextInput, useTheme } from "react-native-paper";
-import { DatePickerInput } from "react-native-paper-dates";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import {
+  Button,
+  HelperText,
+  Text,
+  TextInput,
+  useTheme,
+} from "react-native-paper";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 const ExpenseForm = () => {
   const [date, setDate] = useState(new Date());
-
   const theme = useTheme();
+
+  const initialValues = {
+    expenseName: "",
+    expenseAmount: "",
+    expenseDate: "",
+  };
+
+  const expenseFormSchema = Yup.object().shape({
+    expenseName: Yup.string().required("Please enter a valid expense name"),
+    expenseAmount: Yup.string().matches(
+      /(?=.*?\d)^\$?(([1-9]\d{0,2}(,\d{3})*)|\d+)?(\.\d{1,2})?$/,
+      "Please enter a numerical value"
+    ),
+    expenseDate: Yup.string().required("Please enter a valid date"),
+  });
+
   return (
-    <SafeAreaProvider>
-      <View>
-        <Text>ExpenseForm</Text>
-        <View style={styles.inlineComponents}>
-          <TextInput
-            outlineColor={theme.colors.secondary}
-            style={styles.textInput}
-            label="Enter expense name"
-            mode="outlined"
-          />
-          <TextInput
-            outlineColor={theme.colors.secondary}
-            style={styles.textInput}
-            label="Enter Amount"
-            mode="outlined"
-          />
-        </View>
-        <DatePickerInput
-          outlineColor={theme.colors.secondary}
-          locale="en"
-          label="Pick a date"
-          value={date}
-          onChange={(d) => setDate(d)}
-          inputMode="start"
-          style={styles.dateTextInput}
-          mode="outlined"
-        />
-      </View>
-    </SafeAreaProvider>
+    <KeyboardAvoidingView>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={(values) => console.debug(values)}
+        validationSchema={expenseFormSchema}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+          isSubmitting,
+        }) => (
+          <View>
+            <Text>ExpenseForm</Text>
+            <View style={styles.inlineComponents}>
+              <TextInput
+                outlineColor={theme.colors.secondary}
+                style={styles.textInput}
+                label="Enter expense name"
+                mode="outlined"
+                value={values.expenseName}
+                onBlur={handleBlur("expenseName")}
+                onChangeText={handleChange("expenseName")}
+              />
+              {errors.expenseName && touched.expenseName && (
+                <HelperText>{errors.expenseName}</HelperText>
+              )}
+              <TextInput
+                outlineColor={theme.colors.secondary}
+                style={styles.textInput}
+                label="Enter Amount"
+                mode="outlined"
+                value={values.expenseAmount}
+                onBlur={handleBlur("expenseAmount")}
+                onChangeText={handleChange("expenseAmount")}
+              />
+              {errors.expenseAmount && touched.expenseAmount && (
+                <HelperText>{errors.expenseAmount}</HelperText>
+              )}
+              <TextInput
+                outlineColor={theme.colors.secondary}
+                style={styles.textInput}
+                label="Enter Date (mm-dd-yyy)"
+                mode="outlined"
+                value={values.expenseDate}
+                onBlur={handleBlur("expenseDate")}
+                onChangeText={handleChange("expenseDate")}
+              />
+              {errors.expenseDate && touched.expenseDate && (
+                <HelperText>{errors.expenseDate}</HelperText>
+              )}
+              <Button
+                style={{ marginTop: 5 }}
+                buttonColor={theme.colors.tertiaryContainer}
+                mode="contained"
+                textColor={theme.colors.onBackground}
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                onPress={handleSubmit}
+              >
+                Add Expense
+              </Button>
+            </View>
+          </View>
+        )}
+      </Formik>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -46,16 +108,7 @@ export default ExpenseForm;
 
 const styles = StyleSheet.create({
   textInput: {
-    width: 180,
-    marginHorizontal: 5,
-  },
-  dateTextInput: {
     width: 300,
-    marginTop: -480,
-    marginHorizontal: 5,
-  },
-  inlineComponents: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    marginTop: 6,
   },
 });
