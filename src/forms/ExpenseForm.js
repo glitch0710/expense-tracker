@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import {
   Button,
   HelperText,
@@ -10,10 +10,32 @@ import {
 } from "react-native-paper";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { fireAppDb } from "../../firebase";
 
 const ExpenseForm = () => {
   const [date, setDate] = useState(new Date());
   const theme = useTheme();
+
+  const handleExpenseFormSubmit = async (values) => {
+    const docData = {
+      expense_amount: values.expenseAmount,
+      expense_date: values.expenseDate,
+      expense_name: values.expenseName,
+    };
+
+    await addDoc(
+      collection(fireAppDb, "expenses"),
+      docData,
+      { capital: true },
+      {
+        merge: true,
+      }
+    )
+      .then(function () {
+        alert("Expense successfully saved.");
+      })
+      .catch((error) => alert(error.code, ":", error.message));
+  };
 
   const initialValues = {
     expenseName: "",
@@ -34,7 +56,7 @@ const ExpenseForm = () => {
     <KeyboardAvoidingView>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => console.debug(values)}
+        onSubmit={(values) => handleExpenseFormSubmit(values)}
         validationSchema={expenseFormSchema}
       >
         {({
