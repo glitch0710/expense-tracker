@@ -6,6 +6,7 @@ import React from "react";
 import Header from "../components/Header";
 import ExpenseForm from "../forms/ExpenseForm";
 import { auth } from "../../firebase";
+import Expenses from "../components/Expenses";
 
 const Dashboard = (props) => {
   const theme = useTheme();
@@ -44,6 +45,7 @@ const Dashboard = (props) => {
           Logout
         </Button>
         <ExpenseForm />
+        <Expenses />
       </KeyboardAvoidingView>
     </SafeAreaProvider>
   );
