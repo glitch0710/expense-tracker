@@ -1,4 +1,10 @@
-import { View, StyleSheet, Image, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+} from "react-native";
 import { Text, useTheme, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -32,20 +38,21 @@ const Dashboard = (props) => {
           backgroundColor: theme.colors.background,
         }}
       >
-        <Header />
-        <Text>User logged in: {auth.currentUser?.email}</Text>
-        <Button
-          style={styles.buttonStyle}
-          buttonColor={theme.colors.onCustom1}
-          textColor={theme.colors.onBackground}
-          icon="exit-run"
-          mode="contained"
-          onPress={() => handleLogout()}
-        >
-          Logout
-        </Button>
-        <ExpenseForm />
-        <Expenses />
+        <ScrollView>
+          <Header />
+          <Text>User logged in: {auth.currentUser?.email}</Text>
+          <Button
+            style={styles.buttonStyle}
+            buttonColor={theme.colors.onCustom1}
+            textColor={theme.colors.onBackground}
+            icon="exit-run"
+            mode="contained"
+            onPress={() => handleLogout()}
+          >
+            Logout
+          </Button>
+          <ExpenseForm />
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaProvider>
   );

@@ -11,6 +11,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { fireAppDb } from "../../firebase";
+import Expenses from "../components/Expenses";
 
 const ExpenseForm = () => {
   const [date, setDate] = useState(new Date());
@@ -23,14 +24,7 @@ const ExpenseForm = () => {
       expense_name: values.expenseName,
     };
 
-    await addDoc(
-      collection(fireAppDb, "expenses"),
-      docData,
-      { capital: true },
-      {
-        merge: true,
-      }
-    )
+    await addDoc(collection(fireAppDb, "expenses"), docData)
       .then(function () {
         alert("Expense successfully saved.");
       })
@@ -56,7 +50,10 @@ const ExpenseForm = () => {
     <KeyboardAvoidingView>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values) => handleExpenseFormSubmit(values)}
+        onSubmit={(values, { resetForm }) => {
+          handleExpenseFormSubmit(values);
+          resetForm();
+        }}
         validationSchema={expenseFormSchema}
       >
         {({
@@ -122,6 +119,7 @@ const ExpenseForm = () => {
           </View>
         )}
       </Formik>
+      <Expenses />
     </KeyboardAvoidingView>
   );
 };
