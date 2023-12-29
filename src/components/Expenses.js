@@ -17,8 +17,7 @@ const Expenses = () => {
   }, []);
 
   return (
-    <View>
-      <Text>Expenses</Text>
+    <View style={{ marginTop: 10 }}>
       {expenses.map((exp) => {
         return (
           <View>
