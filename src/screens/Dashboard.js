@@ -8,7 +8,7 @@ import {
 import { Text, useTheme, Button } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import ExpenseForm from "../forms/ExpenseForm";
 import { auth } from "../../firebase";
@@ -17,6 +17,12 @@ import Expenses from "../components/Expenses";
 const Dashboard = (props) => {
   const theme = useTheme();
   const navigations = useNavigation();
+  const [addMode, setAddMode] = useState(true);
+
+  const handleUpdateData = (updateData) => {
+    const { mode } = updateData;
+    setAddMode(mode)
+  };
 
   const handleLogout = () => {
     auth
@@ -51,7 +57,7 @@ const Dashboard = (props) => {
           >
             Logout
           </Button>
-          <ExpenseForm />
+          <ExpenseForm addMode={addMode} updateData={handleUpdateData} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaProvider>

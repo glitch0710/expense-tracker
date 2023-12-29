@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, getDoc } from "firebase/firestore";
 import {
   Button,
   HelperText,
@@ -13,9 +13,26 @@ import * as Yup from "yup";
 import { fireAppDb } from "../../firebase";
 import Expenses from "../components/Expenses";
 
-const ExpenseForm = () => {
-  const [date, setDate] = useState(new Date());
+const ExpenseForm = (props) => {
+  const [expenseName, setExpenseName] = useState("");
+  const [expenseAmount, setExpenseAmount] = useState("");
+  const [expenseDate, setExpenseDate] = useState("");
+  const [expenseId, setExpenseId] = useState("");
   const theme = useTheme();
+
+  const handleUpdateData = (updateData) => {
+    const { id } = updateData;
+    setExpenseId(id);
+
+    const docRef = doc(fireAppDb, "expenses", id);
+    getDoc(docRef).then((docSnap) => {
+      setExpenseName(docSnap.data().expense_name);
+      setExpenseAmount(docSnap.data().expense_amount);
+      setExpenseDate(docSnap.data().expense_date);
+    });
+
+    props.updateData(updateData);
+  };
 
   const handleExpenseFormSubmit = async (values) => {
     const docData = {
@@ -36,6 +53,14 @@ const ExpenseForm = () => {
     expenseAmount: "",
     expenseDate: "",
   };
+
+  if (!props.addMode) {
+    initialValues["expenseName"] = expenseName;
+    initialValues["expenseAmount"] = expenseAmount;
+    initialValues["expenseDate"] = expenseDate;
+  }
+
+  console.debug(initialValues);
 
   const expenseFormSchema = Yup.object().shape({
     expenseName: Yup.string().required("Please enter a valid expense name"),
@@ -66,7 +91,12 @@ const ExpenseForm = () => {
           isSubmitting,
         }) => (
           <View>
-            <Text>ExpenseForm</Text>
+            <Text
+              style={{ textAlign: "center", marginTop: 10 }}
+              variant="bodyLarge"
+            >
+              Expense Form
+            </Text>
             <View style={styles.inlineComponents}>
               <TextInput
                 outlineColor={theme.colors.secondary}
@@ -113,13 +143,13 @@ const ExpenseForm = () => {
                 loading={isSubmitting}
                 onPress={handleSubmit}
               >
-                Add Expense
+                {props.addMode ? "Add Expense" : "Update Expense"}
               </Button>
             </View>
           </View>
         )}
       </Formik>
-      <Expenses />
+      <Expenses addMode={props.addMode} updateData={handleUpdateData} />
     </KeyboardAvoidingView>
   );
 };

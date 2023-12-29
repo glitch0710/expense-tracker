@@ -4,8 +4,13 @@ import { onSnapshot, collection } from "firebase/firestore";
 import { fireAppDb } from "../../firebase";
 import ExpenseItem from "./ExpenseItem";
 
-const Expenses = () => {
+const Expenses = (props) => {
   const [expenses, setExpenses] = useState([]);
+
+  const handleUpdateData = (updateData) => {
+    props.updateData(updateData);
+  };
+
   useEffect(() => {
     onSnapshot(collection(fireAppDb, "expenses"), (snapshot) => {
       setExpenses(
@@ -21,7 +26,11 @@ const Expenses = () => {
       {expenses.map((exp) => {
         return (
           <View>
-            <ExpenseItem key={exp.id} expense={exp} />
+            <ExpenseItem
+              key={exp.id}
+              expense={exp}
+              updateData={handleUpdateData}
+            />
           </View>
         );
       })}

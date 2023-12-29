@@ -1,18 +1,27 @@
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Card, Text, Button } from "react-native-paper";
 import React from "react";
 import { doc, deleteDoc } from "firebase/firestore";
 import { fireAppDb } from "../../firebase";
 
-const handleDelete = async (id) => {
-  await deleteDoc(doc(fireAppDb, "expenses", id))
-    .then(() => {
-      alert("Item successfully deleted.");
-    })
-    .catch((error) => alert(error.code, ":", error.message));
-};
-
 const ExpenseItem = (props) => {
+  const handleDelete = async (id) => {
+    await deleteDoc(doc(fireAppDb, "expenses", id))
+      .then(() => {
+        alert("Item successfully deleted.");
+      })
+      .catch((error) => alert(error.code, ":", error.message));
+  };
+
+  const handleEdit = (mode, id) => {
+    const updateData = {
+      mode: mode,
+      id: id,
+    };
+
+    props.updateData(updateData);
+  };
+
   return (
     <View>
       <Card style={{ marginBottom: 15 }}>
@@ -35,7 +44,9 @@ const ExpenseItem = (props) => {
           </View>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => console.debug("Pressed Edit")}>Edit</Button>
+          <Button onPress={() => handleEdit(false, props.expense.id)}>
+            Edit
+          </Button>
           <Button onPress={() => handleDelete(props.expense.id)}>Delete</Button>
         </Card.Actions>
       </Card>
