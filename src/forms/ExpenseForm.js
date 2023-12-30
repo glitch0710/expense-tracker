@@ -21,15 +21,12 @@ const ExpenseForm = (props) => {
   const theme = useTheme();
 
   const handleUpdateData = (updateData) => {
-    const { id } = updateData;
+    const { id, name, amount, date } = updateData;
     setExpenseId(id);
 
-    const docRef = doc(fireAppDb, "expenses", id);
-    getDoc(docRef).then((docSnap) => {
-      setExpenseName(docSnap.data().expense_name);
-      setExpenseAmount(docSnap.data().expense_amount);
-      setExpenseDate(docSnap.data().expense_date);
-    });
+    setExpenseName(name);
+    setExpenseAmount(amount);
+    setExpenseDate(date);
 
     props.updateData(updateData);
   };
@@ -41,26 +38,31 @@ const ExpenseForm = (props) => {
       expense_name: values.expenseName,
     };
 
-    await addDoc(collection(fireAppDb, "expenses"), docData)
-      .then(function () {
-        alert("Expense successfully saved.");
-      })
-      .catch((error) => alert(error.code, ":", error.message));
+    if (props.addMode) {
+      await addDoc(collection(fireAppDb, "expenses"), docData)
+        .then(function () {
+          alert("Expense successfully saved.");
+        })
+        .catch((error) => alert(error.code, ":", error.message));
+    } else {
+      await setDoc(doc(fireAppDb, "expenses", expenseId), docData)
+        .then(() => {
+          const updateData = {
+            mode: true,
+          };
+
+          props.updateData(updateData);
+          alert("Expense updated successfully");
+        })
+        .catch((error) => alert(error.code, ":", error.message));
+    }
   };
 
   const initialValues = {
-    expenseName: "",
-    expenseAmount: "",
-    expenseDate: "",
+    expenseName: expenseName,
+    expenseAmount: expenseAmount,
+    expenseDate: expenseDate,
   };
-
-  if (!props.addMode) {
-    initialValues["expenseName"] = expenseName;
-    initialValues["expenseAmount"] = expenseAmount;
-    initialValues["expenseDate"] = expenseDate;
-  }
-
-  console.debug(initialValues);
 
   const expenseFormSchema = Yup.object().shape({
     expenseName: Yup.string().required("Please enter a valid expense name"),
@@ -74,6 +76,7 @@ const ExpenseForm = (props) => {
   return (
     <KeyboardAvoidingView>
       <Formik
+        enableReinitialize={true}
         initialValues={initialValues}
         onSubmit={(values, { resetForm }) => {
           handleExpenseFormSubmit(values);

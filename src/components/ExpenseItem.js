@@ -13,10 +13,13 @@ const ExpenseItem = (props) => {
       .catch((error) => alert(error.code, ":", error.message));
   };
 
-  const handleEdit = (mode, id) => {
+  const handleEdit = (mode, id, name, amount, date) => {
     const updateData = {
       mode: mode,
       id: id,
+      name: name,
+      amount: amount,
+      date: date,
     };
 
     props.updateData(updateData);
@@ -44,7 +47,17 @@ const ExpenseItem = (props) => {
           </View>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => handleEdit(false, props.expense.id)}>
+          <Button
+            onPress={() =>
+              handleEdit(
+                false,
+                props.expense.id,
+                props.expense.expense_name,
+                props.expense.expense_amount,
+                props.expense.expense_date
+              )
+            }
+          >
             Edit
           </Button>
           <Button onPress={() => handleDelete(props.expense.id)}>Delete</Button>
